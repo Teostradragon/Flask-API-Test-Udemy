@@ -57,9 +57,9 @@ class User(Resource):
       return{'message': 'user already exist'}
     user = UserModel(
       username=username,
-      password_hash=data['password'],
       email = data['email']
     )
+    user.set_password(data['password'])
     db.session.add(user)
     db.session.commit()
     return user.as_dict(), 201
@@ -97,7 +97,9 @@ class User(Resource):
 
 class UserList(Resource):
 
+
   def get(self):
     users = db.session.query(UserModel).all()
     return [u.as_dict() for u in users]
+
 
